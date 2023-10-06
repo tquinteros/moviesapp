@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Maven+Pro&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Maven Pro', sans-serif;
+}
+
+body {
+  background-color: black;
+  color: white;
+}
+
+
+.test {
+  background: linear-gradient(rgb(48, 50, 62), rgb(30, 31, 42));
+}
+
+.search-bar {
+  background: rgb(39, 39, 39);
+}
