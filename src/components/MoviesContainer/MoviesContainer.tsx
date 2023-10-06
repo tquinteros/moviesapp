@@ -74,12 +74,12 @@ const MoviesContainer = () => {
     };
 
     useEffect(() => {
-        fetchMovies();
-        window.scrollTo(0, 0);
-    }, [currentPage]);
-
-    useEffect(() => {
-        fetchSeries();
+        if (tab === "movies") {
+            fetchMovies();
+        }
+        if (tab === "series") {
+            fetchSeries();
+        }
         window.scrollTo(0, 0);
     }, [currentPage]);
 
@@ -94,6 +94,22 @@ const MoviesContainer = () => {
 
     return (
         <div className="container p-6 md:p-0 mx-auto mb-36 mt-8">
+            <div className="grid justify-items-center mb-0 rounded-lg gap-4 grid-cols-12">
+                <div
+                    onClick={() => handleTab("movies")}
+                    className={`rounded-lg cursor-pointer hover:underline hover:bg-gray-400/25 duration-300 col-span-6 py-3 flex justify-center w-full ${tab === "movies" ? " bg-gray-400/25" : "search-bar"}`}>
+                    <button
+                        className={`text-3xl font-bold  ${tab === "movies" ? "underline" : ""}`}>Movies
+                    </button>
+                </div>
+                <div
+                    onClick={() => handleTab("series")}
+                    className={`rounded-lg cursor-pointer hover:bg-gray-400/25 hover:underline duration-300 col-span-6 py-3 flex justify-center w-full ${tab === "series" ? " bg-gray-400/25" : "search-bar"}`}>
+                    <button
+                        className={`text-3xl font-bold ${tab === "series" ? "underline" : ""}`}>Series
+                    </button>
+                </div>
+            </div>
             <div className="relative flex items-center">
                 <input
                     type="text"
@@ -110,22 +126,6 @@ const MoviesContainer = () => {
                     height={20}
                     alt="Search-Icon"
                 />
-            </div>
-            <div className="grid justify-items-center search-bar mb-6 rounded-lg grid-cols-12">
-                <div 
-                onClick={() => handleTab("movies")}
-                className={`cursor-pointer hover:underline hover:opacity-75 duration-300 col-span-6 py-4 flex justify-center w-full ${tab === "movies" ? " bg-gray-400/25" : ""}`}>
-                    <button
-                        className={`text-3xl font-bold  ${tab === "movies" ? "underline" : ""}`}>Movies
-                    </button>
-                </div>
-                <div 
-                onClick={() => handleTab("series")}
-                className={`cursor-pointer hover:opacity-75 hover:underline duration-300 col-span-6 py-4 flex justify-center w-full ${tab === "series" ? " bg-gray-400/25" : ""}`}>
-                    <button
-                        className={`text-3xl font-bold ${tab === "series" ? "underline" : ""}`}>Series
-                    </button>
-                </div>
             </div>
             <div className="grid grid-cols-12 gap-6">
                 {
