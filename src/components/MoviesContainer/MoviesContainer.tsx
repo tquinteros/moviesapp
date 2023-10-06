@@ -111,17 +111,19 @@ const MoviesContainer = () => {
                     alt="Search-Icon"
                 />
             </div>
-            <div className="grid justify-items-center search-bar py-4 mb-6 rounded-lg grid-cols-12">
-                <div className="col-span-6 flex justify-center w-full">
+            <div className="grid justify-items-center search-bar mb-6 rounded-lg grid-cols-12">
+                <div 
+                onClick={() => handleTab("movies")}
+                className={`cursor-pointer hover:underline hover:opacity-75 duration-300 col-span-6 py-4 flex justify-center w-full ${tab === "movies" ? " bg-gray-400/25" : ""}`}>
                     <button
-                        onClick={() => handleTab("movies")}
-                        className={`text-3xl font-bold hover:opacity-75 hover:underline duration-300 ${tab === "movies" ? "underline" : ""}`}>Movies
+                        className={`text-3xl font-bold  ${tab === "movies" ? "underline" : ""}`}>Movies
                     </button>
                 </div>
-                <div className="col-span-6 flex justify-center w-full">
+                <div 
+                onClick={() => handleTab("series")}
+                className={`cursor-pointer hover:opacity-75 hover:underline duration-300 col-span-6 py-4 flex justify-center w-full ${tab === "series" ? " bg-gray-400/25" : ""}`}>
                     <button
-                        onClick={() => handleTab("series")}
-                        className={`text-3xl font-bold hover:opacity-75 hover:underline duration-300 ${tab === "series" ? "underline" : ""}`}>Series
+                        className={`text-3xl font-bold ${tab === "series" ? "underline" : ""}`}>Series
                     </button>
                 </div>
             </div>
