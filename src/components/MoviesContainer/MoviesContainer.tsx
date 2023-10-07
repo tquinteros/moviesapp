@@ -25,6 +25,7 @@ const MoviesContainer = () => {
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
+    const [searchFavorite, setSearchFavorite] = useState("");
     const [tab, setTab] = useState("movies");
     const [favoriteMovies, setFavoriteMovies] = useState<MoviesItemProps[]>([]);
     const [defaultMovies, setDefaultMovies] = useState<MoviesItemProps[]>([]);
@@ -173,6 +174,11 @@ const MoviesContainer = () => {
         }
     }, []);
 
+    const filterFavoriteMovies = favoriteMovies.filter((movie) => {
+        return movie.original_title.toLowerCase().includes(searchFavorite.toLowerCase());
+    }
+    );
+
 
     return (
         <div className="container p-6 lg:p-2 xl:p-0 mx-auto mb-36 mt-8">
@@ -208,7 +214,7 @@ const MoviesContainer = () => {
                     </button>
                 </div>
             </div>
-            <div className="relative flex items-center">
+            <div className={`relative flex items-center ${tab === "favorites" ? "hidden" : ""}`}>
                 <input
                     type="text"
                     placeholder="Search"
@@ -224,7 +230,7 @@ const MoviesContainer = () => {
                         }
                         setIsLoading(false);
                     }}
-                    className="search-bar pl-11 rounded-lg px-4 my-8 py-3 w-full"
+                    className={`search-bar pl-11 rounded-lg px-4 my-8 py-3 w-full`}
                 />
                 <Image
                     className="absolute left-3"
@@ -314,9 +320,24 @@ const MoviesContainer = () => {
                 {
                     tab === "favorites" && (
                         <div className="col-span-12">
+                            <div className={`relative flex items-center`}>
+                                <input
+                                    type="text"
+                                    placeholder="Search"
+                                    onChange={(e) => setSearchFavorite(e.target.value)}
+                                    className="search-bar pl-11 rounded-lg px-4 my-8 py-3 w-full"
+                                />
+                                <Image
+                                    className="absolute left-3"
+                                    src="/searchicon.png"
+                                    width={20}
+                                    height={20}
+                                    alt="Search-Icon"
+                                />
+                            </div>
                             <div className="grid grid-cols-12 gap-6">
                                 {
-                                    favoriteMovies.map((movie, index) => (
+                                    filterFavoriteMovies.map((movie, index) => (
                                         <MovieCard
                                             key={index}
                                             id={movie.id}
