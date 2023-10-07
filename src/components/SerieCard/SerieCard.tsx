@@ -7,10 +7,10 @@ import Skeleton from "react-loading-skeleton";
 import { AiOutlineStar } from "react-icons/ai";
 
 const ImageSkeleton = () => {
-    return <Skeleton className=" h-[300px] w-[300px]" height={300} width={350} />;
+    return <Skeleton className="h-[300px] w-[300px]" height={300} width={350} />;
 };
 
-const SerieCard = ({ id, original_name, overview, poster_path, release_date, vote_average, vote_count, genres, index, isLoading }: SeriesItemsProps) => {
+const SerieCard = ({ id, original_name, overview, poster_path, first_air_date, vote_average, vote_count, genres, index, isLoading }: SeriesItemsProps) => {
     const baseUrl = "https://image.tmdb.org/t/p/";
     const posterPath = poster_path;
     const imageUrl = `${baseUrl}${posterPath}`;
@@ -41,7 +41,7 @@ const SerieCard = ({ id, original_name, overview, poster_path, release_date, vot
     };
 
     const handlePushToMovie = () => {
-        router.push(`/movie/${id}`);
+        router.push(`/series/${id}`);
     }
 
     return (
@@ -71,11 +71,10 @@ const SerieCard = ({ id, original_name, overview, poster_path, release_date, vot
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-bold">{original_name}</h1>
                     <div className="flex items-center gap-1">
-                        <p>{vote_average.toFixed(2)}/10 </p>
+                        <p>{vote_average.toFixed(1)}/10 </p>
                         <AiOutlineStar color="#ffff00" />
                     </div>
                 </div>
-                <p>{genres}</p>
             </div>
         </motion.div>
     );

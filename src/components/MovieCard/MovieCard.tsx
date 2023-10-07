@@ -78,7 +78,7 @@ const MovieCard = ({ id, original_title, overview, poster_path, release_date, vo
                 <div className="flex items-center justify-between">
                     <h1 className="text-xl font-bold">{original_title}</h1>
                     <div className="flex items-center gap-1">
-                        <p>{vote_average.toFixed(2)}/10 </p>
+                        <p>{vote_average.toFixed(1)}/10 </p>
                         <AiOutlineStar color="#ffff00" />
                     </div>
                 </div>

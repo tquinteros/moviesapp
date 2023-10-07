@@ -1,11 +1,21 @@
 "use client"
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import MovieCard from "../MovieCard/MovieCard";
 import { MoviesItemProps, SeriesItemsProps } from "@/types/types";
 import Image from "next/image";
 import { AiOutlineArrowRight, AiOutlineArrowLeft } from "react-icons/ai";
 import SerieCard from "../SerieCard/SerieCard";
+import { optionsParticles } from './particleOptions'
+import Particles from 'react-tsparticles'
+import { loadFull } from 'tsparticles'
+import type { Engine } from 'tsparticles-engine'
+import Skeleton from "react-loading-skeleton";
+import 'react-loading-skeleton/dist/skeleton.css'
+
+const ImageSkeleton = () => {
+    return <Skeleton baseColor="#202020" highlightColor="#444" className="w-full min-h-[300px]" />;
+};
 
 const MoviesContainer = () => {
     const [movies, setMovies] = useState<MoviesItemProps[]>([]);
@@ -15,13 +25,25 @@ const MoviesContainer = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [tab, setTab] = useState("movies");
+
+    const particlesInit = useCallback(async (engine: Engine) => {
+        await loadFull(engine)
+    }, [])
+
+    const particlesLoaded = useCallback(async () => { }, [])
+
     const fetchMovies = async () => {
-        setIsLoading(true);
-        const res = await axios.get(
-            `https://api.themoviedb.org/3/discover/movie?api_key=eb8f0af79880e0d8a9a3e7b7daaac3fe&page=${currentPage}`
-        );
-        setMovies(res.data.results);
-        setIsLoading(false);
+        try {
+            setIsLoading(true);
+            const res = await axios.get(
+                `https://api.themoviedb.org/3/discover/movie?api_key=eb8f0af79880e0d8a9a3e7b7daaac3fe&page=${currentPage}`
+            );
+            setMovies(res.data.results);
+            setIsLoading(false);
+        }
+        catch (error) {
+            console.log(error);
+        }
     };
 
     const fetchSeries = async () => {
@@ -37,7 +59,7 @@ const MoviesContainer = () => {
         const genreResponse = await axios.get(
             "https://api.themoviedb.org/3/genre/movie/list?api_key=eb8f0af79880e0d8a9a3e7b7daaac3fe"
         );
-        const genreMap: { [key: number]: string } = {}; // Define el tipo adecuado para genreMap
+        const genreMap: { [key: number]: string } = {};
         genreResponse.data.genres.forEach((genre: any) => {
             genreMap[genre.id] = genre.name;
         });
@@ -94,7 +116,16 @@ const MoviesContainer = () => {
 
     return (
         <div className="container p-6 md:p-0 mx-auto mb-36 mt-8">
-            <div className="grid justify-items-center mb-0 rounded-lg gap-4 grid-cols-12">
+            <div className="absolute w-full -z-50 h-full top-0 left-0">
+                <Particles
+                    className="w-full h-full"
+                    id="tsparticles"
+                    init={particlesInit}
+                    loaded={particlesLoaded}
+                    options={optionsParticles}
+                />
+            </div>
+            <div className="grid z-50 justify-items-center mb-0 rounded-lg gap-4 grid-cols-12">
                 <div
                     onClick={() => handleTab("movies")}
                     className={`rounded-lg cursor-pointer hover:underline hover:bg-gray-400/25 duration-300 col-span-6 py-3 flex justify-center w-full ${tab === "movies" ? " bg-gray-400/25" : "search-bar"}`}>
@@ -130,26 +161,38 @@ const MoviesContainer = () => {
             <div className="grid grid-cols-12 gap-6">
                 {
                     tab === "movies" && (
-                        filteredMovies.length === 0 ? (
-                            <h4 className="text-3xl font-thin col-span-12 w-full">No Items Found</h4>
+                        isLoading ? (
+                            <div className="grid grid-cols-12 gap-6 col-span-12">
+                                {
+                                    Array.from(Array(4).keys()).map((index) => (
+                                        <div className="lg:col-span-4 xl:col-span-3 md:col-span-6 sm:col-span-6 col-span-12" key={index}>
+                                            <ImageSkeleton />
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         ) : (
-                            filteredMovies.map((movie, index) => (
-                                <MovieCard
-                                    key={index}
-                                    id={movie.id}
-                                    original_title={movie.original_title}
-                                    overview={movie.overview}
-                                    poster_path={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                    release_date={movie.release_date}
-                                    vote_average={movie.vote_average}
-                                    vote_count={movie.vote_count}
-                                    adult={movie.adult}
-                                    genres={mapGenreIdsToNames(movie.genre_ids, genres)}
-                                    genre_ids={movie.genre_ids}
-                                    index={index}
-                                    isLoading={isLoading}
-                                />
-                            ))
+                            filteredMovies.length > 0 ? (
+                                filteredMovies.map((movie, index) => (
+                                    <MovieCard
+                                        key={index}
+                                        id={movie.id}
+                                        original_title={movie.original_title}
+                                        overview={movie.overview}
+                                        poster_path={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                        release_date={movie.release_date}
+                                        vote_average={movie.vote_average}
+                                        vote_count={movie.vote_count}
+                                        adult={movie.adult}
+                                        genres={mapGenreIdsToNames(movie.genre_ids, genres)}
+                                        genre_ids={movie.genre_ids}
+                                        index={index}
+                                        isLoading={isLoading}
+                                    />
+                                ))
+                            ) : (
+                                <h4 className="text-3xl font-thin col-span-12 w-full">No Items Found</h4>
+                            )
                         )
                     )
                 }
@@ -165,7 +208,7 @@ const MoviesContainer = () => {
                                     original_name={movie.original_name}
                                     overview={movie.overview}
                                     poster_path={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                    release_date={movie.release_date}
+                                    first_air_date={movie.first_air_date}
                                     vote_average={movie.vote_average}
                                     vote_count={movie.vote_count}
                                     genres={mapGenreIdsToNames(movie.genre_ids, genres)}
