@@ -97,11 +97,9 @@ const MoviesContainer = () => {
 
     useEffect(() => {
         if (tab === "movies") {
-            console.log(currentPage);
             fetchMovies();
         }
         if (tab === "series") {
-            console.log(currentPage);
             fetchSeries();
         }
         setTimeout(() => {

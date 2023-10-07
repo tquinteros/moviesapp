@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { MoviesItemProps, SerieItemContainerProps } from "@/types/types";
 import Image from "next/image";
 import { AiOutlineStar } from "react-icons/ai";
+import Particles from 'react-tsparticles'
+import { loadFull } from 'tsparticles'
+import type { Engine } from 'tsparticles-engine'
+import { optionsParticles } from "../MoviesContainer/particleOptions";
 
 const SerieItemContainer: React.FC<SerieItemContainerProps> = ({ serie }) => {
 
@@ -9,8 +13,23 @@ const SerieItemContainer: React.FC<SerieItemContainerProps> = ({ serie }) => {
     const posterPath = serie.poster_path;
     const imageUrl = `${baseUrl}${posterPath}`;
 
+    const particlesInit = useCallback(async (engine: Engine) => {
+        await loadFull(engine)
+    }, [])
+
+    const particlesLoaded = useCallback(async () => { }, [])
+
     return (
         <div className="container grid my-12 mt-6 md:p-0 grid-cols-12 gap-0 md:gap-6 mx-auto">
+            <div className="absolute w-full -z-50 h-full top-0 left-0">
+                <Particles
+                    className="w-full h-full"
+                    id="tsparticles"
+                    init={particlesInit}
+                    loaded={particlesLoaded}
+                    options={optionsParticles}
+                />
+            </div>
             <div className="col-span-12 p-6 md:p-0 md:col-span-6">
                 <Image src={`https://image.tmdb.org/t/p/w500${serie.poster_path}`} className="w-full max-h-[750px]" width={400} height={400} alt={serie.original_name} />
             </div>
