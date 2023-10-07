@@ -162,7 +162,7 @@ const MoviesContainer = () => {
 
 
     return (
-        <div className="container p-6 md:p-0 mx-auto mb-36 mt-8">
+        <div className="container p-6 lg:p-2 xl:p-0 mx-auto mb-36 mt-8">
             <div className="absolute w-full -z-50 h-full top-0 left-0">
                 <Particles
                     className="w-full h-full"

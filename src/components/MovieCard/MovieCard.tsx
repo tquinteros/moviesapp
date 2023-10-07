@@ -76,7 +76,7 @@ const MovieCard = ({ id, original_title, overview, poster_path, release_date, vo
                     )
                 }
                 <button className="border absolute top-2 left-2 px-4 z-50 border-white py-3 bg-[#0000004D] backdrop-blur-2xl rounded-lg" onClick={() => toggleFavorite(id)}>
-                    {!isFavorite ? <AiOutlineStar color="#ffff00" size={16} /> : <AiTwotoneStar color="#ffff00" size={16} />}
+                    {!isFavorite ? "Agregar a Favoritos" : <AiTwotoneStar color="#ffff00" size={16} />}
                 </button>
             </div>
             <div className="flex flex-col justify-between gap-4 px-6 pb-6 mt-4">
