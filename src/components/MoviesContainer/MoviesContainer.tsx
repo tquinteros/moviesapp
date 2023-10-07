@@ -27,7 +27,7 @@ const MoviesContainer = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [tab, setTab] = useState("movies");
     const [favoriteMovies, setFavoriteMovies] = useState<MoviesItemProps[]>([]);
-
+    const [defaultMovies, setDefaultMovies] = useState<MoviesItemProps[]>([]);
     const particlesInit = useCallback(async (engine: Engine) => {
         await loadFull(engine)
     }, [])
@@ -41,6 +41,7 @@ const MoviesContainer = () => {
                 `https://api.themoviedb.org/3/discover/movie?api_key=eb8f0af79880e0d8a9a3e7b7daaac3fe&page=${currentPage}`
             );
             setMovies(res.data.results);
+            setDefaultMovies(res.data.results);
             setIsLoading(false);
         }
         catch (error) {
@@ -116,6 +117,18 @@ const MoviesContainer = () => {
     useEffect(() => {
         setCurrentPage(1);
     }, [tab]);
+
+    const fetchSearchResults = async (query: string) => {
+        try {
+            const res = await axios.get(
+                `https://api.themoviedb.org/3/search/movie?api_key=eb8f0af79880e0d8a9a3e7b7daaac3fe&query=${query}`
+            );
+            setMovies(res.data.results);
+            setIsLoading(false);
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     const toggleFavorite = (movieId: number) => {
         if (favoriteMovies.some((favMovie) => favMovie.id === movieId)) {
@@ -199,8 +212,17 @@ const MoviesContainer = () => {
                 <input
                     type="text"
                     placeholder="Search"
-                    onChange={(event) => {
-                        setSearchTerm(event.target.value);
+                    onChange={async (event) => {
+                        const query = event.target.value;
+                        setSearchTerm(query);
+                        setIsLoading(true);
+
+                        if (query.trim() === "") {
+                            setMovies(defaultMovies);
+                        } else {
+                            await fetchSearchResults(query);
+                        }
+                        setIsLoading(false);
                     }}
                     className="search-bar pl-11 rounded-lg px-4 my-8 py-3 w-full"
                 />
