@@ -97,12 +97,16 @@ const MoviesContainer = () => {
 
     useEffect(() => {
         if (tab === "movies") {
+            console.log(currentPage);
             fetchMovies();
         }
         if (tab === "series") {
+            console.log(currentPage);
             fetchSeries();
         }
-        window.scrollTo(0, 0);
+        setTimeout(() => {
+            window.scrollTo(0, 0);
+        }, 150);
     }, [currentPage]);
 
     const handleTab = (tab: string) => {
@@ -234,10 +238,15 @@ const MoviesContainer = () => {
                     )
                 }
             </div>
-            <div className="flex mt-12 justify-center sticky z-50 bottom-4 gap-2 items-center">
-                <button className={`font-thin flex justify-center text-xl p-4 rounded-lg hover:underline border w-30 search-bar ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={prevPage}><AiOutlineArrowLeft size={28} /></button>
+            <div className="hidden md:flex mt-12 justify-center sticky z-50 bottom-4 gap-2 items-center">
+                <button className={`font-thin flex justify-center text-xl p-4  rounded-lg hover:underline border w-30 search-bar ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={prevPage}><AiOutlineArrowLeft size={28} /></button>
                 <span className="font-thin text-xl p-4 px-6 rounded-lg border search-bar w-30 select-none">{currentPage}</span>
                 <button className={`font-thin flex justify-center text-xl p-4 border rounded-lg w-30 search-bar hover:underline ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={nextPage}> <AiOutlineArrowRight size={28} /> </button>
+            </div>
+            <div className="flex md:hidden mt-12 justify-center sticky z-50 bottom-4 gap-2 items-center">
+                <button className={`font-thin flex justify-center text-md w-12 rounded-lg py-2.5 hover:underline border search-bar ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={prevPage}><AiOutlineArrowLeft size={24} /></button>
+                <span className="font-thin text-md px-6 rounded-lg py-2.5 border search-bar select-none">{currentPage}</span>
+                <button className={`font-thin flex justify-center text-md w-12 border rounded-lg py-2.5 search-bar hover:underline ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={nextPage}> <AiOutlineArrowRight size={24} /> </button>
             </div>
         </div>
     );
