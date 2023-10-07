@@ -6,6 +6,7 @@ import Particles from 'react-tsparticles'
 import { loadFull } from 'tsparticles'
 import type { Engine } from 'tsparticles-engine'
 import { optionsParticles } from "../MoviesContainer/particleOptions";
+import { motion } from "framer-motion";
 
 const SerieItemContainer: React.FC<SerieItemContainerProps> = ({ serie }) => {
 
@@ -30,19 +31,39 @@ const SerieItemContainer: React.FC<SerieItemContainerProps> = ({ serie }) => {
                     options={optionsParticles}
                 />
             </div>
-            <div className="col-span-12 p-6 md:p-0 md:col-span-6">
+            <motion.div 
+            initial={{  opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 1.2 }}
+            className="col-span-12 p-6 md:p-0 md:col-span-6">
                 <Image src={`https://image.tmdb.org/t/p/w500${serie.poster_path}`} className="w-full max-h-[750px]" width={400} height={400} alt={serie.original_name} />
-            </div>
+            </motion.div>
             <div className="col-span-12 flex flex-col gap-2 p-6 md:p-0 md:col-span-6">
-                <h1 className="text-4xl font-bold">{serie.original_name}</h1>
-                <p className="text-lg">{serie.overview}</p>
+                <motion.h1
+                    initial={{ y: 200, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.4, duration: 1.2 }}
+                    className="text-4xl font-bold">{serie.original_name}</motion.h1>
+                <motion.p
+                    initial={{ y: 300, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.6, duration: 1.2 }}
+                    className="text-lg">{serie.overview}</motion.p>
                 {/* <p>{serie.genres}</p> */}
                 <div className="flex flex-col md:flex-row gap-2 mt-6 md:gap-0 justify-between md:mt-auto">
-                    <p>First Air Date: {serie.first_air_date}</p>
-                    <div className="flex items-center gap-1">
-                        <p>Vote Average: {serie.vote_average.toFixed(1)}/10 </p>
-                        <AiOutlineStar color="#ffff00" />
-                        ({serie.vote_count})
+                    <motion.p
+                        initial={{ y: -300, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.8, duration: 1.2 }}
+                        className="">First Air Date: {serie.first_air_date}</motion.p>
+                    <div className="">
+                        <motion.p
+                            initial={{ y: -300, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ delay: 0.8, duration: 1.2 }}
+                            className="flex items-center gap-1">Vote Average: {serie.vote_average.toFixed(1)}/10
+                            <AiOutlineStar color="#ffff00" />
+                            ({serie.vote_count})</motion.p>
                     </div>
                 </div>
             </div>
