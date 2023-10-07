@@ -164,7 +164,7 @@ const MoviesContainer = () => {
                         isLoading ? (
                             <div className="grid grid-cols-12 gap-6 col-span-12">
                                 {
-                                    Array.from(Array(4).keys()).map((index) => (
+                                    Array.from(Array(8).keys()).map((index) => (
                                         <div className="lg:col-span-4 xl:col-span-3 md:col-span-6 sm:col-span-6 col-span-12" key={index}>
                                             <ImageSkeleton />
                                         </div>
@@ -202,7 +202,7 @@ const MoviesContainer = () => {
                         isLoading ? (
                             <div className="grid grid-cols-12 gap-6 col-span-12">
                                 {
-                                    Array.from(Array(4).keys()).map((index) => (
+                                    Array.from(Array(8).keys()).map((index) => (
                                         <div className="lg:col-span-4 xl:col-span-3 md:col-span-6 sm:col-span-6 col-span-12" key={index}>
                                             <ImageSkeleton />
                                         </div>
@@ -234,10 +234,10 @@ const MoviesContainer = () => {
                     )
                 }
             </div>
-            <div className="flex mt-12 justify-center sticky bottom-4 gap-2 items-center">
-                <button className="font-thin flex justify-center text-xl p-4 rounded-lg hover:underline cursor-pointer border w-30 search-bar" onClick={prevPage}><AiOutlineArrowLeft size={28} /></button>
+            <div className="flex mt-12 justify-center sticky z-50 bottom-4 gap-2 items-center">
+                <button className={`font-thin flex justify-center text-xl p-4 rounded-lg hover:underline border w-30 search-bar ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={prevPage}><AiOutlineArrowLeft size={28} /></button>
                 <span className="font-thin text-xl p-4 px-6 rounded-lg border search-bar w-30 select-none">{currentPage}</span>
-                <button className="font-thin flex justify-center text-xl p-4 border rounded-lg w-30 search-bar hover:underline cursor-pointer" onClick={nextPage}> <AiOutlineArrowRight size={28} /> </button>
+                <button className={`font-thin flex justify-center text-xl p-4 border rounded-lg w-30 search-bar hover:underline ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={nextPage}> <AiOutlineArrowRight size={28} /> </button>
             </div>
         </div>
     );
