@@ -196,55 +196,47 @@ const MoviesContainer = () => {
                         )
                     )
                 }
+
                 {
                     tab === "series" && (
-                        filteredSeries.length === 0 ? (
-                            <h4 className="text-3xl font-thin col-span-12 w-full">No Items Found</h4>
+                        isLoading ? (
+                            <div className="grid grid-cols-12 gap-6 col-span-12">
+                                {
+                                    Array.from(Array(4).keys()).map((index) => (
+                                        <div className="lg:col-span-4 xl:col-span-3 md:col-span-6 sm:col-span-6 col-span-12" key={index}>
+                                            <ImageSkeleton />
+                                        </div>
+                                    ))
+                                }
+                            </div>
                         ) : (
-                            filteredSeries.map((movie, index) => (
-                                <SerieCard
-                                    key={index}
-                                    id={movie.id}
-                                    original_name={movie.original_name}
-                                    overview={movie.overview}
-                                    poster_path={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                                    first_air_date={movie.first_air_date}
-                                    vote_average={movie.vote_average}
-                                    vote_count={movie.vote_count}
-                                    genres={mapGenreIdsToNames(movie.genre_ids, genres)}
-                                    genre_ids={movie.genre_ids}
-                                    index={index}
-                                    isLoading={isLoading}
-                                />
-                            ))
+                            filteredSeries.length > 0 ? (
+                                filteredSeries.map((movie, index) => (
+                                    <SerieCard
+                                        key={index}
+                                        id={movie.id}
+                                        original_name={movie.original_name}
+                                        overview={movie.overview}
+                                        poster_path={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                        first_air_date={movie.first_air_date}
+                                        vote_average={movie.vote_average}
+                                        vote_count={movie.vote_count}
+                                        genres={mapGenreIdsToNames(movie.genre_ids, genres)}
+                                        genre_ids={movie.genre_ids}
+                                        index={index}
+                                        isLoading={isLoading}
+                                    />
+                                ))
+                            ) : (
+                                <h4 className="text-3xl font-thin col-span-12 w-full">No Items Found</h4>
+                            )
                         )
                     )
                 }
-                {/* {filteredMovies.length === 0 ? (
-                    <h4 className="text-3xl font-thin col-span-12 w-full">No Items Found</h4>
-                ) : (
-                    filteredMovies.map((movie, index) => (
-                        <MovieCard
-                            key={index}
-                            id={movie.id}
-                            original_title={movie.original_title}
-                            overview={movie.overview}
-                            poster_path={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
-                            release_date={movie.release_date}
-                            vote_average={movie.vote_average}
-                            vote_count={movie.vote_count}
-                            adult={movie.adult}
-                            genres={mapGenreIdsToNames(movie.genre_ids, genres)}
-                            genre_ids={movie.genre_ids}
-                            index={index}
-                            isLoading={isLoading}
-                        />
-                    ))
-                )} */}
             </div>
-            <div className="flex mt-12 justify-center gap-2 items-center">
+            <div className="flex mt-12 justify-center sticky bottom-4 gap-2 items-center">
                 <button className="font-thin flex justify-center text-xl p-4 rounded-lg hover:underline cursor-pointer border w-30 search-bar" onClick={prevPage}><AiOutlineArrowLeft size={28} /></button>
-                <span className="font-thin text-xl p-4 px-6 rounded-lg border search-bar hover:underline w-30 cursor-pointer">{currentPage}</span>
+                <span className="font-thin text-xl p-4 px-6 rounded-lg border search-bar w-30 select-none">{currentPage}</span>
                 <button className="font-thin flex justify-center text-xl p-4 border rounded-lg w-30 search-bar hover:underline cursor-pointer" onClick={nextPage}> <AiOutlineArrowRight size={28} /> </button>
             </div>
         </div>
