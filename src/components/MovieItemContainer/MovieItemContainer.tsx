@@ -34,7 +34,7 @@ const MovieItemContainer: React.FC<MovieItemContainerProps> = ({ movie }) => {
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.2, duration: 1.2 }}
+                transition={{ delay: 0.3, duration: 1.4 }}
                 className="col-span-12 p-6 md:p-0 md:col-span-6">
                 <Image src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} className="w-full max-h-[750px]" width={400} height={400} alt={movie.original_title} />
             </motion.div>
