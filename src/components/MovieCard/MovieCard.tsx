@@ -4,13 +4,13 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Skeleton from "react-loading-skeleton";
-import { AiOutlineStar } from "react-icons/ai";
+import { AiOutlineStar, AiTwotoneStar } from "react-icons/ai";
 
 const ImageSkeleton = () => {
     return <Skeleton className=" h-[300px] w-[300px]" height={300} width={350} />;
 };
 
-const MovieCard = ({ id, original_title, overview, poster_path, release_date, vote_average, vote_count, adult, genres, index, isLoading }: MoviesItemProps) => {
+const MovieCard = ({ id, original_title, overview, poster_path, release_date, vote_average, vote_count, adult, genres, index, isLoading, toggleFavorite, isFavorite }: MoviesItemProps) => {
     const baseUrl = "https://image.tmdb.org/t/p/";
     const posterPath = poster_path;
     const imageUrl = `${baseUrl}${posterPath}`;
@@ -46,22 +46,24 @@ const MovieCard = ({ id, original_title, overview, poster_path, release_date, vo
 
     return (
         <motion.div
-            onClick={handlePushToMovie}
-            className="lg:col-span-4 xl:col-span-3 md:col-span-6 sm:col-span-6 col-span-12 cursor-pointer test rounded-lg"
+
+            className="lg:col-span-4 xl:col-span-3 md:col-span-6 sm:col-span-6 col-span-12 test rounded-lg"
             onHoverStart={handleMouseEnter}
             onHoverEnd={handleMouseLeave}
             variants={cardVariants}
             initial="initial"
             animate={isHovered ? "hover" : "initial"}
         >
-            <div className="relative">
+            <div
+                className="relative">
                 {isLoading ? (
                     <ImageSkeleton />
                 ) : (
                     <Image
                         src={imageUrl}
+                        onClick={handlePushToMovie}
                         width={350}
-                        className="max-h-[300px] rounded-t-lg w-full object-fit"
+                        className="max-h-[300px] cursor-pointer rounded-t-lg w-full object-fit"
                         height={300}
                         alt={original_title}
                     />
@@ -73,6 +75,9 @@ const MovieCard = ({ id, original_title, overview, poster_path, release_date, vo
                         <span className="absolute top-2 right-2  text-white font-extrabold text-xl px-3 py-1.5 rounded-lg border-white border-2 bg-[#0000004D] backdrop-blur-2xl">ATP</span>
                     )
                 }
+                <button className="border absolute top-2 left-2 px-4 z-50 border-white py-3 bg-[#0000004D] backdrop-blur-2xl rounded-lg" onClick={() => toggleFavorite(id)}>
+                    {!isFavorite ? <AiOutlineStar color="#ffff00" size={16} /> : <AiTwotoneStar color="#ffff00" size={16} />}
+                </button>
             </div>
             <div className="flex flex-col justify-between gap-4 px-6 pb-6 mt-4">
                 <div className="flex items-center justify-between">

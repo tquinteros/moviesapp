@@ -25,6 +25,7 @@ const MoviesContainer = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isLoading, setIsLoading] = useState(true);
     const [tab, setTab] = useState("movies");
+    const [favoriteMovies, setFavoriteMovies] = useState<MoviesItemProps[]>([]);
 
     const particlesInit = useCallback(async (engine: Engine) => {
         await loadFull(engine)
@@ -115,6 +116,20 @@ const MoviesContainer = () => {
         setCurrentPage(1);
     }, [tab]);
 
+    const toggleFavorite = (movieId: number) => {
+        if (favoriteMovies.some((favMovie) => favMovie.id === movieId)) {
+            // Si la película ya está en favoritos, quítala.
+            const updatedFavorites = favoriteMovies.filter((favMovie) => favMovie.id !== movieId);
+            setFavoriteMovies(updatedFavorites);
+        } else {
+            // Si no está en favoritos, agrégala.
+            const movieToAdd = movies.find((movie) => movie.id === movieId);
+            if (movieToAdd) {
+                setFavoriteMovies([...favoriteMovies, movieToAdd]);
+            }
+        }
+    };
+
 
     return (
         <div className="container p-6 md:p-0 mx-auto mb-36 mt-8">
@@ -130,16 +145,23 @@ const MoviesContainer = () => {
             <div className="grid z-50 justify-items-center mb-0 rounded-lg gap-4 grid-cols-12">
                 <div
                     onClick={() => handleTab("movies")}
-                    className={`rounded-lg cursor-pointer hover:underline hover:bg-gray-400/25 duration-300 col-span-6 py-3 flex justify-center w-full ${tab === "movies" ? " bg-gray-400/25" : "search-bar"}`}>
+                    className={`rounded-lg cursor-pointer hover:underline hover:bg-gray-400/25 duration-300 col-span-6 md:col-span-4 py-3 flex justify-center w-full ${tab === "movies" ? " bg-gray-400/25" : "search-bar"}`}>
                     <button
                         className={`text-3xl font-bold  ${tab === "movies" ? "underline" : ""}`}>Movies
                     </button>
                 </div>
                 <div
                     onClick={() => handleTab("series")}
-                    className={`rounded-lg cursor-pointer hover:bg-gray-400/25 hover:underline duration-300 col-span-6 py-3 flex justify-center w-full ${tab === "series" ? " bg-gray-400/25" : "search-bar"}`}>
+                    className={`rounded-lg cursor-pointer hover:bg-gray-400/25 hover:underline duration-300 col-span-6 md:col-span-4 py-3 flex justify-center w-full ${tab === "series" ? " bg-gray-400/25" : "search-bar"}`}>
                     <button
                         className={`text-3xl font-bold ${tab === "series" ? "underline" : ""}`}>Series
+                    </button>
+                </div>
+                <div
+                    onClick={() => handleTab("favorites")}
+                    className={`rounded-lg cursor-pointer hover:bg-gray-400/25 hover:underline duration-300 col-span-12 md:col-span-4 py-3 flex justify-center w-full ${tab === "favorites" ? " bg-gray-400/25" : "search-bar"}`}>
+                    <button
+                        className={`text-3xl font-bold ${tab === "favorites" ? "underline" : ""}`}>Favorites ({favoriteMovies.length})
                     </button>
                 </div>
             </div>
@@ -190,6 +212,8 @@ const MoviesContainer = () => {
                                         genre_ids={movie.genre_ids}
                                         index={index}
                                         isLoading={isLoading}
+                                        toggleFavorite={() => toggleFavorite(movie.id)} // Pasar solo el id
+                                        isFavorite={favoriteMovies.some((favMovie) => favMovie.id === movie.id)}
                                     />
                                 ))
                             ) : (
@@ -235,13 +259,42 @@ const MoviesContainer = () => {
                         )
                     )
                 }
+                {
+                    tab === "favorites" && (
+                        <div className="col-span-12">
+                            <div className="grid grid-cols-12 gap-6">
+                                {
+                                    favoriteMovies.map((movie, index) => (
+                                        <MovieCard
+                                            key={index}
+                                            id={movie.id}
+                                            original_title={movie.original_title}
+                                            overview={movie.overview}
+                                            poster_path={`https://image.tmdb.org/t/p/w500${movie.poster_path}`}
+                                            release_date={movie.release_date}
+                                            vote_average={movie.vote_average}
+                                            vote_count={movie.vote_count}
+                                            adult={movie.adult}
+                                            genres={mapGenreIdsToNames(movie.genre_ids, genres)}
+                                            genre_ids={movie.genre_ids}
+                                            index={index}
+                                            isLoading={isLoading}
+                                            toggleFavorite={() => toggleFavorite(movie.id)} // Pasar solo el id
+                                            isFavorite={favoriteMovies.some((favMovie) => favMovie.id === movie.id)}
+                                        />
+                                    ))
+                                }
+                            </div>
+                        </div>
+                    )
+                }
             </div>
-            <div className="hidden md:flex mt-12 justify-center sticky z-50 bottom-4 gap-2 items-center">
+            <div className={`mt-12 justify-center sticky z-50 bottom-4 gap-2 items-center ${tab === "favorites" ? "hidden" : "hidden md:flex"}`}>
                 <button className={`font-thin flex justify-center text-xl p-4  rounded-lg hover:underline border w-30 search-bar ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={prevPage}><AiOutlineArrowLeft size={28} /></button>
                 <span className="font-thin text-xl p-4 px-6 rounded-lg border search-bar w-30 select-none">{currentPage}</span>
                 <button className={`font-thin flex justify-center text-xl p-4 border rounded-lg w-30 search-bar hover:underline ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={nextPage}> <AiOutlineArrowRight size={28} /> </button>
             </div>
-            <div className="flex md:hidden mt-12 justify-center sticky z-50 bottom-4 gap-2 items-center">
+            <div className={`mt-12 justify-center sticky z-50 bottom-4 gap-2 items-center ${tab === "favorites" ? "hidden" : "flex md:hidden"}`}>
                 <button className={`font-thin flex justify-center text-md w-12 rounded-lg py-2.5 hover:underline border search-bar ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={prevPage}><AiOutlineArrowLeft size={24} /></button>
                 <span className="font-thin text-md px-6 rounded-lg py-2.5 border search-bar select-none">{currentPage}</span>
                 <button className={`font-thin flex justify-center text-md w-12 border rounded-lg py-2.5 search-bar hover:underline ${!isLoading ? "cursor-pointer" : "opacity-75 cursor-not-allowed"}`} disabled={isLoading} onClick={nextPage}> <AiOutlineArrowRight size={24} /> </button>

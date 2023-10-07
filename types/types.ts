@@ -11,6 +11,8 @@ export interface MoviesItemProps {
   genre_ids: number[];
   index: number;
   isLoading: boolean;
+  toggleFavorite: (movieId: number) => void;
+  isFavorite?: boolean; // Propiedad opcional
 }
 
 export interface SeriesItemsProps {
