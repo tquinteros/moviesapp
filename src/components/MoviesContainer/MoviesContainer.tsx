@@ -12,6 +12,7 @@ import { loadFull } from 'tsparticles'
 import type { Engine } from 'tsparticles-engine'
 import Skeleton from "react-loading-skeleton";
 import 'react-loading-skeleton/dist/skeleton.css'
+import { toast } from "react-toastify";
 
 const ImageSkeleton = () => {
     return <Skeleton baseColor="#202020" highlightColor="#444" className="w-full min-h-[300px]" />;
@@ -118,17 +119,46 @@ const MoviesContainer = () => {
 
     const toggleFavorite = (movieId: number) => {
         if (favoriteMovies.some((favMovie) => favMovie.id === movieId)) {
-            // Si la película ya está en favoritos, quítala.
             const updatedFavorites = favoriteMovies.filter((favMovie) => favMovie.id !== movieId);
             setFavoriteMovies(updatedFavorites);
+            localStorage.setItem('favoriteMovies', JSON.stringify(updatedFavorites));
+
+            toast.success("Removed from favorites", {
+                position: "bottom-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "dark"
+            });
         } else {
-            // Si no está en favoritos, agrégala.
             const movieToAdd = movies.find((movie) => movie.id === movieId);
+            toast.success("Added to favorites", {
+                position: "bottom-right",
+                autoClose: 2000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: false,
+                draggable: true,
+                progress: undefined,
+                theme: "dark"
+            });
             if (movieToAdd) {
-                setFavoriteMovies([...favoriteMovies, movieToAdd]);
+                const updatedFavorites = [...favoriteMovies, movieToAdd];
+                setFavoriteMovies(updatedFavorites);
+                localStorage.setItem('favoriteMovies', JSON.stringify(updatedFavorites));
             }
         }
     };
+
+    useEffect(() => {
+        const storedFavorites = localStorage.getItem('favoriteMovies');
+        if (storedFavorites) {
+            setFavoriteMovies(JSON.parse(storedFavorites));
+        }
+    }, []);
 
 
     return (

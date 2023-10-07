@@ -5,7 +5,7 @@ import { BiCameraMovie } from "react-icons/bi";
 
 const Header = () => {
     return (
-        <header className="container sticky bg-black px-6 md:px-0 top-0 z-50 py-4 mx-auto">
+        <header className="container sticky bg-black px-6 md:px-0 top-0 z-[999] py-4 mx-auto">
             <nav className="flex justify-between">
                 <Link href="/" className="hover:opacity-75 duration-300">
                     <BiCameraMovie size={64} />
